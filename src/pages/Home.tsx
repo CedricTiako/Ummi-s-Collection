@@ -68,10 +68,10 @@ const Home: React.FC = () => {
           </p>
           <Link
             to="/products"
-            className="inline-flex items-center px-8 py-4 bg-white text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+            className="hero-button inline-flex items-center justify-center"
           >
             {t('home.shopNow')}
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <ArrowRight className="arrow w-5 h-5" />
           </Link>
         </div>
       </section>

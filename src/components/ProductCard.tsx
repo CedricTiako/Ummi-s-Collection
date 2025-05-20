@@ -1,9 +1,7 @@
 import React from 'react';
 import { ShoppingBag } from 'lucide-react';
-import { t } from '../lib/i18n';
-import { Database } from '../types/supabase';
-
-type Product = Database['public']['Tables']['products']['Row'];
+import { Product } from '../types/supabase';
+import { t, getLanguage } from '../lib/i18n';
 
 interface ProductCardProps {
   product: Product;
@@ -11,10 +9,17 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleOrderClick = () => {
-    const whatsappText = encodeURIComponent(
-      `Bonjour, je suis intéressé(e) par ${product.name} vu sur Ummi's Collection.`
-    );
-    window.open(`https://wa.me/237683998930?text=${whatsappText}`, '_blank');
+    const currentLanguage = getLanguage();
+    const messageTemplate = t('products.orderViaWhatsApp', currentLanguage);
+    
+    // Remplacer les placeholders dans le template
+    const whatsappText = messageTemplate
+      .replace('{productName}', product.name)
+      .replace('{price}', product.price.toString())
+      .replace('{productUrl}', `${window.location.origin}/products/${product.id}`);
+    
+    const encodedText = encodeURIComponent(whatsappText);
+    window.open(`https://wa.me/237683998930?text=${encodedText}`, '_blank');
   };
 
   return (
@@ -53,7 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             className="flex items-center text-sm bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md transition-colors"
           >
             <ShoppingBag className="w-4 h-4 mr-1" />
-            <span>{t('products.orderViaWhatsApp')}</span>
+            <span>{t('home.shopNow')}</span>
           </button>
         </div>
       </div>

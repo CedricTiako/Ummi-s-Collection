@@ -1,13 +1,83 @@
 // Define translation type
-type Translations = {
-  [key: string]: string | { [key: string]: string | { [key: string]: string } };
+type TranslationValue = string | {
+  [key: string]: string | ValidationMessages | SuccessMessages;
 };
+
+type Translations = {
+  [key: string]: TranslationValue | { [key: string]: TranslationValue };
+};
+
+// Type for validation messages
+interface ValidationMessages {
+  nameRequired: string;
+  descriptionRequired: string;
+  priceRequired: string;
+  priceNumeric: string;
+  categoryRequired: string;
+  imageRequired: string;
+}
+
+// Type for success messages
+interface SuccessMessages {
+  create: string;
+  update: string;
+  delete: string;
+}
 
 // Define the available languages
 export const languages = {
   fr: 'Français',
   en: 'English',
+} as const;
+
+// Current language
+let currentLanguage: keyof typeof languages = 'en';
+
+// Set language
+export const setLanguage = (lang: keyof typeof languages) => {
+  currentLanguage = lang;
 };
+
+// Get current language
+export const getLanguage = (): keyof typeof languages => {
+  return currentLanguage;
+};
+
+// Get all translations for the current language
+export function getTranslations() {
+  return currentLanguage === 'en' ? enTranslations : frTranslations;
+}
+
+// Get a specific translation
+function getTranslation(key: string, language: keyof typeof languages): string {
+  const keys = key.split('.');
+  const translations = getTranslations();
+
+  let result: any = translations;
+  for (const k of keys) {
+    if (result && typeof result === 'object' && k in result) {
+      result = result[k];
+    } else {
+      return key; // Return the key if translation is not found
+    }
+  }
+
+  // If the result is an object with language-specific translations, return the one for the current language
+  if (typeof result === 'object' && result !== null && language in result) {
+    return result[language];
+  }
+  
+  return typeof result === 'string' ? result : key;
+}
+
+// Get a specific translation
+export function t(key: string, language: keyof typeof languages = 'en'): string {
+  const translation = getTranslation(key, language);
+  if (typeof translation === 'object' && translation !== null) {
+    return translation[language] || translation.fr || key;
+  }
+  return translation || key;
+}
 
 // French translations (default)
 export const frTranslations: Translations = {
@@ -31,7 +101,10 @@ export const frTranslations: Translations = {
   home: {
     welcome: "Bienvenue chez Ummi's Collection",
     subtitle: "Spécialiste des vêtements féminins à Douala",
-    shopNow: "Découvrir",
+    shopNow: {
+      fr: "Commander via WhatsApp",
+      en: "Order via WhatsApp"
+    },
     featuredProducts: "Produits populaires",
     viewAll: "Voir tout",
   },
@@ -46,7 +119,10 @@ export const frTranslations: Translations = {
     },
     loadMore: "Charger plus",
     price: "Prix",
-    orderViaWhatsApp: "Commander via WhatsApp",
+    orderViaWhatsApp: {
+      fr: "Bonjour, je suis intéressé(e) par {productName} vu sur Ummi's Collection. Le prix est de {price} FCFA.\nVous pouvez voir le produit ici : {productUrl}",
+      en: "Hello, I am interested in {productName} from Ummi's Collection. The price is {price} FCFA.\nYou can view the product here: {productUrl}"
+    },
     currency: "FCFA",
   },
   contact: {
@@ -93,12 +169,12 @@ export const frTranslations: Translations = {
         priceRequired: "Le prix est requis",
         priceNumeric: "Le prix doit être un nombre",
         categoryRequired: "La catégorie est requise",
-        imageRequired: "L'image est requise",
+        imageRequired: "L'image est requise"
       },
       success: {
         create: "Produit créé avec succès",
         update: "Produit mis à jour avec succès",
-        delete: "Produit supprimé avec succès",
+        delete: "Produit supprimé avec succès"
       },
     },
   },
@@ -126,7 +202,10 @@ export const enTranslations: Translations = {
   home: {
     welcome: "Welcome to Ummi's Collection",
     subtitle: "Specialist in women's clothing in Douala",
-    shopNow: "Shop Now",
+    shopNow: {
+      fr: "Commander via WhatsApp",
+      en: "Order via WhatsApp"
+    },
     featuredProducts: "Featured Products",
     viewAll: "View All",
   },
@@ -141,12 +220,15 @@ export const enTranslations: Translations = {
     },
     loadMore: "Load More",
     price: "Price",
-    orderViaWhatsApp: "Order via WhatsApp",
+    orderViaWhatsApp: {
+      fr: "Bonjour, je suis intéressé(e) par {productName} vu sur Ummi's Collection. Le prix est de {price} FCFA.\nVous pouvez voir le produit ici : {productUrl}",
+      en: "Hello, I am interested in {productName} from Ummi's Collection. The price is {price} FCFA.\nYou can view the product here: {productUrl}"
+    },
     currency: "FCFA",
   },
   contact: {
     title: "Contact Us",
-    subtitle: "We are at your disposal to answer your questions",
+    subtitle: "We are here to answer your questions",
     whatsApp: "WhatsApp",
     facebook: "Facebook",
     tiktok: "TikTok",
@@ -178,7 +260,7 @@ export const enTranslations: Translations = {
       price: "Price",
       category: "Category",
       image: "Image",
-      chooseFile: "Choose File",
+      chooseFile: "Choose file",
       noFile: "No file chosen",
       save: "Save",
       resetForm: "Reset",
@@ -188,63 +270,21 @@ export const enTranslations: Translations = {
         priceRequired: "Price is required",
         priceNumeric: "Price must be a number",
         categoryRequired: "Category is required",
-        imageRequired: "Image is required",
+        imageRequired: "Image is required"
       },
       success: {
         create: "Product created successfully",
         update: "Product updated successfully",
-        delete: "Product deleted successfully",
+        delete: "Product deleted successfully"
       },
     },
   },
 };
 
-// Store the current language
-let currentLanguage = localStorage.getItem('language') || 'fr';
-
-// Get all translations for the current language
-export function getTranslations() {
-  return currentLanguage === 'fr' ? frTranslations : enTranslations;
-}
-
-// Get a specific translation
-export function t(key: string): string {
-  const keys = key.split('.');
-  const translations = getTranslations();
-  
-  let result: any = translations;
-  for (const k of keys) {
-    if (result && typeof result === 'object' && k in result) {
-      result = result[k];
-    } else {
-      return key; // Return the key if translation is not found
-    }
-  }
-  
-  return typeof result === 'string' ? result : key;
-}
-
-// Set the current language
-export function setLanguage(language: 'fr' | 'en') {
-  if (languages[language]) {
-    currentLanguage = language;
-    localStorage.setItem('language', language);
-    
-    // Dispatch an event to notify the app that the language has changed
-    window.dispatchEvent(new CustomEvent('languageChange', { detail: language }));
-    
-    // Update the HTML lang attribute
-    document.documentElement.lang = language;
-  }
-}
-
-// Get the current language
-export function getLanguage() {
-  return currentLanguage;
-}
-
 // Initialize the language on page load
 export function initializeLanguage() {
-  const savedLanguage = localStorage.getItem('language') || 'fr';
-  setLanguage(savedLanguage as 'fr' | 'en');
+  const savedLanguage = localStorage.getItem('language');
+  if (savedLanguage && languages[savedLanguage as keyof typeof languages]) {
+    setLanguage(savedLanguage as keyof typeof languages);
+  }
 }
