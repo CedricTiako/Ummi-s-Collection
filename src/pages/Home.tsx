@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import background from '../assets/images/background.jpg';
+import background2 from '../assets/images/background2.jpg';
+import backgroundMilieu from '../assets/images/background-milieux.jpg';
 import { t } from '../lib/i18n';
 import { getProducts } from '../lib/supabase';
 import ProductCard from '../components/ProductCard';
 import { Database } from '../types/supabase';
+import '../styles/backgroundAnimations.css';
 
 type Product = Database['public']['Tables']['products']['Row'];
 
@@ -31,26 +35,60 @@ const Home: React.FC = () => {
     <div className="animate-fade-in">
       {/* Hero section */}
       <section 
-        className="relative h-screen bg-cover bg-center flex items-center"
+        className="relative h-screen overflow-hidden"
         style={{ 
-          backgroundImage: 'url(https://images.pexels.com/photos/6347548/pexels-photo-6347548.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)', 
-          backgroundPosition: 'center',
-          backgroundSize: 'cover'
+          position: 'relative',
+          height: '100vh'
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        {/* Fond gauche */}
+        <div 
+          className="absolute top-0 left-0 w-1/3 h-full bg-cover bg-center background-left"
+          style={{ 
+            backgroundImage: `url(${background})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center left',
+            opacity: 0.8
+          }}
+        />
         
-        <div className="container mx-auto px-4 z-10 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-heading animate-slide-in">
+        {/* Fond milieu */}
+        <div 
+          className="absolute top-0 left-1/3 w-1/3 h-full bg-cover bg-center background-center parallax"
+          style={{ 
+            backgroundImage: `url(${backgroundMilieu})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            opacity: 0.9
+          }}
+        />
+        
+        {/* Fond droit */}
+        <div 
+          className="absolute top-0 right-0 w-1/3 h-full bg-cover bg-center background-right"
+          style={{ 
+            backgroundImage: `url(${background2})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
+            opacity: 0.8
+          }}
+        />
+        
+        {/* Overlay et contenu */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="container mx-auto px-4 z-10 text-center relative" style={{
+          transform: 'translateY(-50%)',
+          top: '50%'
+        }}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-heading animate-bounce">
             {t('home.welcome')}
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto animate-slide-in" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto animate-pulse">
             {t('home.subtitle')}
           </p>
           <Link
             to="/products"
-            className="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors animate-slide-in"
-            style={{ animationDelay: '0.4s' }}
+            className="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors animate-bounce hover:animate-none"
           >
             {t('home.shopNow')}
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -157,6 +195,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
     </div>
   );
 };
