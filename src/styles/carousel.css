@@ -1,0 +1,90 @@
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.hero-carousel .carousel-image {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.5s ease-in-out;
+  will-change: transform, opacity;
+}
+
+/* Effet de profondeur */
+.hero-carousel .carousel-image:nth-child(1) {
+  z-index: 3;
+  filter: brightness(1.1);
+}
+
+.hero-carousel .carousel-image:nth-child(2) {
+  z-index: 2;
+  filter: brightness(0.9);
+}
+
+.hero-carousel .carousel-image:nth-child(3) {
+  z-index: 1;
+  filter: brightness(0.8);
+}
+
+/* Animation de transition */
+.hero-carousel .carousel-image.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.hero-carousel .carousel-image.fade-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Effet de parallaxe sur desktop */
+@media (min-width: 1025px) {
+  .hero-carousel .carousel-image {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .hero-carousel:hover .carousel-image {
+    transform: translateY(-10px);
+  }
+}
+
+/* Effet de coin sur tablette */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-carousel .carousel-image {
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+  }
+}
+
+/* Effet de coin sur mobile */
+@media (max-width: 640px) {
+  .hero-carousel .carousel-image {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+  }
+}
+
+/* Animation de chargement */
+.hero-carousel .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Effet de survol sur les images */
+.hero-carousel .carousel-image:hover {
+  filter: brightness(1.2);
+  transform: scale(1.02);
+}

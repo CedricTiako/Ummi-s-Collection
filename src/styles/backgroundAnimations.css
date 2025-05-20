@@ -1,54 +1,77 @@
-@keyframes slideLeft {
-  0% {
-    transform: translateX(0);
+@keyframes slideMobile {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@media (max-width: 640px) {
+  .background-left {
+    animation: slideMobile 12s ease-in-out infinite;
   }
-  100% {
-    transform: translateX(-20px);
+
+  .background-center {
+    animation: slideMobile 12s ease-in-out 3s infinite;
+  }
+
+  .background-right {
+    animation: slideMobile 12s ease-in-out 6s infinite;
   }
 }
 
-@keyframes slideRight {
-  0% {
-    transform: translateX(0);
+@media (min-width: 640px) {
+  @keyframes slideLeft {
+    0% { 
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: translateX(0) scale(1.05);
+      opacity: 0.9;
+    }
+    100% { 
+      transform: translateX(-100%) scale(1);
+      opacity: 0;
+    }
   }
-  100% {
-    transform: translateX(20px);
+
+  @keyframes slideRight {
+    0% { 
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: translateX(0) scale(1.05);
+      opacity: 0.9;
+    }
+    100% { 
+      transform: translateX(100%) scale(1);
+      opacity: 0;
+    }
   }
-}
 
-@keyframes parallax {
-  0% {
-    transform: translateY(0);
+  @keyframes parallax {
+    0% { 
+      transform: translateY(0) scale(1);
+      opacity: 0.9;
+    }
+    50% { 
+      transform: translateY(-20%) scale(1.1);
+      opacity: 1;
+    }
+    100% { 
+      transform: translateY(0) scale(1);
+      opacity: 0.9;
+    }
   }
-  50% {
-    transform: translateY(-10px);
+
+  .background-left {
+    animation: slideLeft 12s ease-in-out infinite;
   }
-  100% {
-    transform: translateY(0);
+
+  .background-center {
+    animation: parallax 24s ease-in-out infinite;
   }
-}
 
-.background-left {
-  animation: slideLeft 10s ease-in-out infinite alternate;
-}
-
-.background-right {
-  animation: slideRight 10s ease-in-out infinite alternate;
-}
-
-.parallax {
-  animation: parallax 5s ease-in-out infinite;
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+  .background-right {
+    animation: slideRight 12s ease-in-out infinite;
   }
 }

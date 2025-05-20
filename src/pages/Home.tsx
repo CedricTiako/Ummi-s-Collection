@@ -4,9 +4,14 @@ import { ArrowRight } from 'lucide-react';
 import background from '../assets/images/background.jpg';
 import background2 from '../assets/images/background2.jpg';
 import backgroundMilieu from '../assets/images/background-milieux.jpg';
+import abayaImage from '../assets/images/category-abaya.jpg';
+import jallabiyaImage from '../assets/images/category-jallabiya.jpg';
+import tshirtImage from '../assets/images/category-tshirt.jpg';
+import handbagImage from '../assets/images/category-handbag.jpg';
 import { t } from '../lib/i18n';
 import { getProducts } from '../lib/supabase';
 import ProductCard from '../components/ProductCard';
+import Carousel from '../components/Carousel';
 import { Database } from '../types/supabase';
 import '../styles/backgroundAnimations.css';
 
@@ -41,57 +46,32 @@ const Home: React.FC = () => {
           height: '100vh'
         }}
       >
-        {/* Fond gauche */}
-        <div 
-          className="absolute top-0 left-0 w-1/3 h-full bg-cover bg-center background-left"
-          style={{ 
-            backgroundImage: `url(${background})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center left',
-            opacity: 0.8
-          }}
-        />
-        
-        {/* Fond milieu */}
-        <div 
-          className="absolute top-0 left-1/3 w-1/3 h-full bg-cover bg-center background-center parallax"
-          style={{ 
-            backgroundImage: `url(${backgroundMilieu})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            opacity: 0.9
-          }}
-        />
-        
-        {/* Fond droit */}
-        <div 
-          className="absolute top-0 right-0 w-1/3 h-full bg-cover bg-center background-right"
-          style={{ 
-            backgroundImage: `url(${background2})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center right',
-            opacity: 0.8
-          }}
-        />
-        
+        {/* Carousel */}
+        <div className="hero-carousel">
+          <Carousel
+            images={[background2, backgroundMilieu, background]}
+            interval={5000}
+          />
+        </div>
+
         {/* Overlay et contenu */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="container mx-auto px-4 z-10 text-center relative" style={{
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div className="container mx-auto px-4 z-20 text-center relative" style={{
           transform: 'translateY(-50%)',
           top: '50%'
         }}>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-heading animate-bounce">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             {t('home.welcome')}
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto animate-pulse">
+          <p className="text-xl md:text-2xl text-gray-200 mb-8">
             {t('home.subtitle')}
           </p>
           <Link
             to="/products"
-            className="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors animate-bounce hover:animate-none"
+            className="inline-flex items-center px-8 py-4 bg-white text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
           >
             {t('home.shopNow')}
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Link>
         </div>
       </section>
@@ -142,7 +122,7 @@ const Home: React.FC = () => {
               className="relative h-64 rounded-lg overflow-hidden group"
             >
               <img
-                src="https://images.pexels.com/photos/6347885/pexels-photo-6347885.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={abayaImage}
                 alt={t('products.category.abaya')}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -156,7 +136,7 @@ const Home: React.FC = () => {
               className="relative h-64 rounded-lg overflow-hidden group"
             >
               <img
-                src="https://images.pexels.com/photos/6348057/pexels-photo-6348057.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={jallabiyaImage}
                 alt={t('products.category.jallabiya')}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -170,7 +150,7 @@ const Home: React.FC = () => {
               className="relative h-64 rounded-lg overflow-hidden group"
             >
               <img
-                src="https://images.pexels.com/photos/5868207/pexels-photo-5868207.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={tshirtImage}
                 alt={t('products.category.tshirt')}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -184,7 +164,7 @@ const Home: React.FC = () => {
               className="relative h-64 rounded-lg overflow-hidden group"
             >
               <img
-                src="https://images.pexels.com/photos/1204464/pexels-photo-1204464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src={handbagImage}
                 alt={t('products.category.handbag')}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
